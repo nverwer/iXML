@@ -1,0 +1,56 @@
+value <= null | boolean | number | string | list | element | richText
+
+null <- :'null'
+
+boolean <- 'true' | 'false'
+
+number <- ?numsign digits ?(decpoint digits) ?(numexp ?numsign digits)
+numsign <- [+-]
+decpoint <- "."
+numexp <- [eE]
+digits <- +[0-9]
+
+string
+ <- (:'"' *(!'"' charRep) :'"')
+  | (:"'" *(!"'" charRep) :"'")
+
+list
+ <- emptyList /* because empty RHS is not recognized */
+  | :"[" ?:space
+    ?( ?:space
+     | (value | implicitnull) *( :(?space "," ?space) (value | implicitnull) )
+     | value *( :?space value )
+     )
+    ?:space :"]"
+
+emptyList <- '[' ?:space ']'
+
+implicitnull <- &(?space [,\]])
+
+element
+ <- emptyElement
+  | :"<" ?name *(attribute) ?content ?:space :">"
+
+emptyElement <- '<' ?:space '>'
+
+name <- simpleName | quotedName
+simpleName <= (letter | [_]) *(letter | [0-9_])
+quotedName <= :"`" +((!"`" charRep) | escape) :"`"
+attribute <- :?space name :(?space "=" ?space) value
+content <- :?space value
+
+richText <- :"|" *(charRep | element) :"|"
+
+letter <= [A-Za-z0-9À-ÖÙ-ÿ]
+space <= +[\t\n\r \<00>-\<20>\<A0>]
+charRep <= (![\\|{<] .) | escape
+escape
+ <- :'\\'
+    ( [nrtsS\\"'|`<{] # Not [, which is used for cells.
+    | space
+    | hexcode
+    | cell
+    )
+hexcode <- :'x' *[0-9A-Za-z] :';'
+# Cell does not work correctly, because Waxeye does not support back-references.
+cell <- :'[' . *(!']' . | '\\]') . :']'

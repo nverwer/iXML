@@ -1,0 +1,12 @@
+<purchaseOrder 
+   orderDate="1999-10-20" 
+>
+<purchaseOrder 
+   shipTo = <country="US" [
+      <name "Alice Smith">
+      <street "123 Maple Street">
+      <city "Mill Valley">
+      <state "CA">
+      <zip 90952>
+   ]>
+>

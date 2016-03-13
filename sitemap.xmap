@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+
+  <map:components>
+
+    <map:generators default="file">
+
+      <!-- De TextGenerator2 gaat beter om met UTF-8. -->
+      <map:generator name="text" src="org.apache.cocoon.generation.TextGenerator2" logger="sitemap.generator.text">
+        <parameter name="localizable" value="true"/>
+        <parameter name="encoding" value="UTF-8"/>
+      </map:generator>
+
+      <map:generator name="uri" src="org.apache.cocoon.generation.UriGenerator" label="content" logger="sitemap.generator" pool-grow="4" pool-max="32" pool-min="8"/>
+
+    </map:generators>
+
+    <map:transformers default="xslt-saxon">
+
+      <map:transformer name="xslt-saxon" pool-grow="2" pool-max="32" pool-min="8" src="org.apache.cocoon.transformation.TraxTransformer">
+        <use-request-parameters>false</use-request-parameters>
+        <use-browser-capabilities-db>false</use-browser-capabilities-db>
+        <xslt-processor-role>saxon</xslt-processor-role>
+      </map:transformer>
+
+      <!-- This one strips unnecessary namespace prefixes.-->
+      <map:transformer name="clean-namespaces" src="org.apache.cocoon.transformation.NamespaceStripperTransformer" logger="sitemap.transformer"/>
+
+      <!-- Waxeye implementatie van Parsing Expression Grammars. -->
+      <map:transformer name="waxeye" src="org.apache.cocoon.transformation.WaxeyeParserTransformer" logger="sitemap.transformer.parser">
+        <map:parameter name="waxeye.bin" value="{linkextractor-properties:waxeye.bin}"/>
+        <map:parameter name="compiler-compliance-level" value="1.5"/>
+      </map:transformer>
+
+    </map:transformers>
+
+    <map:serializers default="xml">
+
+      <!-- Encode all serialized XML in UTF-8, ... -->
+      <map:serializer name="xml" logger="sitemap.serializer.xml" mime-type="text/xml; charset=UTF-8" src="org.apache.cocoon.serialization.XMLSerializer">
+        <encoding>UTF-8</encoding>
+      </map:serializer>
+
+    </map:serializers>
+
+  </map:components>
+
+
+  <map:pipelines>
+
+    <map:pipeline type="noncaching">
+
+      <map:match pattern="parse/**">
+        <map:generate type="text" src="{1}">
+          <map:parameter name="element" value="ftan:ml"/>
+          <map:parameter name="namespace" value="http://www.balisage.net/Proceedings/vol10/html/Kay01/BalisageVol10-Kay01.html"/>
+        </map:generate>
+        <map:transform type="waxeye" src="ftan.waxeye">
+          <map:parameter name="namespaceURI" value="http://www.balisage.net/Proceedings/vol10/html/Kay01/BalisageVol10-Kay01.html"/>
+          <map:parameter name="parseElementTag" value="ml"/>
+            <map:parameter name="modular" value="false"/>
+            <map:parameter name="completeMatch" value="false"/> <!-- complete input text must be parsed as one matched fragment -->
+            <map:parameter name="adjacentMatches" value="false"/> <!-- complete input must be consumed as adjacent matched fragments -->
+            <map:parameter name="parseErrors value="false"/> <!-- include errors in the output, do not trigger an exception -->
+            <map:parameter name="showParseTree value="false"/> <!-- show the parse tree in an XML comment -->
+            <map:parameter name="keepXML value="false"/> <!-- XML inside the trigger element is serialized and passed as the input to the scanner -->
+            <map:parameter name="toASCII value="false"/> <!-- characters in the input must be converted to low ASCII characters -->
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
+
+      <map:match pattern="xml/**">
+        <map:generate src="cocoon:/parse/{1}"/>
+        <map:transform src="simplify-ftan.xslt"/>
+        <map:serialize type="xml"/>
+      </map:match>
+
+    </map:pipeline>
+
+  </map:pipelines>
+
+</map:sitemap>

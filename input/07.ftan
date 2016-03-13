@@ -1,0 +1,32 @@
+<purchaseOrder 
+   orderDate="1999-10-20" 
+   shipTo = <country="US" [
+      <name "Alice Smith">
+      <street "123 Maple Street">
+      <city "Mill Valley">
+      <state "CA">
+      <zip 90952>
+   ]>
+   billTo = <country="US" [
+      <name "Robert Smith">
+      <street "8 Oak Avenue">
+      <city "Old Town">
+      <state "PA">
+      <zip 95819>
+   ]>
+   comment = |<emph |Hurry|>, my lawn is going wild|
+   items = [
+      <  partNum="872-AA"
+         productName="Lawnmower"
+         quantity=1
+         USPrice=148.95
+         comment=|Confirm this is <strong |electric|>|
+      >
+      <  partNum="926-AA"
+         productName="Baby Monitor"
+         quantity=1
+         USPrice=39.98
+         shipDate="1999-05-21"
+      >
+   ]
+>
