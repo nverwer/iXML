@@ -61,10 +61,10 @@
             <map:parameter name="modular" value="false"/>
             <map:parameter name="completeMatch" value="false"/> <!-- complete input text must be parsed as one matched fragment -->
             <map:parameter name="adjacentMatches" value="false"/> <!-- complete input must be consumed as adjacent matched fragments -->
-            <map:parameter name="parseErrors value="false"/> <!-- include errors in the output, do not trigger an exception -->
-            <map:parameter name="showParseTree value="false"/> <!-- show the parse tree in an XML comment -->
-            <map:parameter name="keepXML value="false"/> <!-- XML inside the trigger element is serialized and passed as the input to the scanner -->
-            <map:parameter name="toASCII value="false"/> <!-- characters in the input must be converted to low ASCII characters -->
+            <map:parameter name="parseErrors" value="false"/> <!-- include errors in the output, do not trigger an exception -->
+            <map:parameter name="showParseTree" value="false"/> <!-- show the parse tree in an XML comment -->
+            <map:parameter name="keepXML" value="false"/> <!-- XML inside the trigger element is serialized and passed as the input to the scanner -->
+            <map:parameter name="toASCII" value="false"/> <!-- characters in the input must be converted to low ASCII characters -->
         </map:transform>
         <map:serialize type="xml"/>
       </map:match>
