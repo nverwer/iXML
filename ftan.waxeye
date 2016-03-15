@@ -42,7 +42,7 @@ content <- :?space value
 richText <- :"|" *(charRep | element) :"|"
 
 letter <= [A-Za-z0-9À-ÖÙ-ÿ]
-space <= +[\t\n\r \<00>-\<20>\<A0>]
+space <= +[\t\n\r\<00>-\<20>\<A0>]
 charRep <= (![\\|{<] .) | escape
 escape
  <- :'\\'

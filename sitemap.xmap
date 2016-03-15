@@ -5,7 +5,7 @@
 
     <map:generators default="file">
 
-      <!-- De TextGenerator2 gaat beter om met UTF-8. -->
+      <!-- TextGenerator2 has better handling of UTF-8. See https://github.com/nverwer/cocooncomponents. -->
       <map:generator name="text" src="org.apache.cocoon.generation.TextGenerator2" logger="sitemap.generator.text">
         <parameter name="localizable" value="true"/>
         <parameter name="encoding" value="UTF-8"/>
@@ -28,7 +28,7 @@
 
       <!-- Waxeye implementatie van Parsing Expression Grammars. -->
       <map:transformer name="waxeye" src="org.apache.cocoon.transformation.WaxeyeParserTransformer" logger="sitemap.transformer.parser">
-        <map:parameter name="waxeye.bin" value="{linkextractor-properties:waxeye.bin}"/>
+        <map:parameter name="waxeye.bin" value="{sitemap-path:waxeye/windows/waxeye.exe}"/>
         <map:parameter name="compiler-compliance-level" value="1.5"/>
       </map:transformer>
 
@@ -58,13 +58,13 @@
         <map:transform type="waxeye" src="ftan.waxeye">
           <map:parameter name="namespaceURI" value="http://www.balisage.net/Proceedings/vol10/html/Kay01/BalisageVol10-Kay01.html"/>
           <map:parameter name="parseElementTag" value="ml"/>
-            <map:parameter name="modular" value="false"/>
-            <map:parameter name="completeMatch" value="false"/> <!-- complete input text must be parsed as one matched fragment -->
-            <map:parameter name="adjacentMatches" value="false"/> <!-- complete input must be consumed as adjacent matched fragments -->
-            <map:parameter name="parseErrors" value="false"/> <!-- include errors in the output, do not trigger an exception -->
-            <map:parameter name="showParseTree" value="false"/> <!-- show the parse tree in an XML comment -->
-            <map:parameter name="keepXML" value="false"/> <!-- XML inside the trigger element is serialized and passed as the input to the scanner -->
-            <map:parameter name="toASCII" value="false"/> <!-- characters in the input must be converted to low ASCII characters -->
+          <map:parameter name="modular" value="false"/>
+          <map:parameter name="completeMatch" value="false"/> <!-- complete input text must be one matched fragment -->
+          <map:parameter name="adjacentMatches" value="false"/> <!-- complete input must be adjacent matched fragments -->
+          <map:parameter name="parseErrors" value="false"/> <!-- errors in the output, do not trigger exceptions -->
+          <map:parameter name="showParseTree" value="false"/> <!-- show the parse tree in an XML comment -->
+          <map:parameter name="keepXML" value="false"/> <!-- XML inside trigger element is serialized and parsed -->
+          <map:parameter name="toASCII" value="false"/> <!-- convert characters in the input to low ASCII -->
         </map:transform>
         <map:serialize type="xml"/>
       </map:match>
