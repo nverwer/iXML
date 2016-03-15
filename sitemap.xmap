@@ -50,6 +50,10 @@
 
     <map:pipeline type="noncaching">
 
+      <map:match pattern="">
+        <map:read src="index.html"/>
+      </map:match>
+
       <map:match pattern="parse/**">
         <map:generate type="text" src="{1}">
           <map:parameter name="element" value="ftan:ml"/>
